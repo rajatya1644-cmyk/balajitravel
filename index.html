@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balaji Travels — Outstation & Airport Taxi Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt:#1B1F23;
+    --asphalt-2:#262B30;
+    --highway:#145A32;
+    --highway-light:#1E7A45;
+    --amber:#E8A33D;
+    --paper:#F3EFE6;
+    --ink:#2A2A26;
+    --muted:#6B6B62;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+  }
+
+  h1,h2,h3,.eyebrow,.btn,.card h3,.route-city{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+
+  .lane{
+    height:4px;
+    background:repeating-linear-gradient(90deg, var(--amber) 0 24px, transparent 24px 44px);
+    margin:0 auto;
+  }
+
+  .hero{
+    background:var(--asphalt);
+    color:var(--paper);
+    padding:20px 24px 0;
+  }
+
+  .navbar{
+    max-width:1080px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:26px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  .brand{
+    font-family:'Oswald', sans-serif;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:1px;
+    color:var(--paper);
+  }
+
+  .brand span{ color:var(--amber); }
+
+  .navbar a.callbtn{
+    background:var(--amber);
+    color:var(--asphalt);
+    padding:9px 18px;
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    text-decoration:none;
+    border-radius:3px;
+    letter-spacing:1px;
+  }
+
+  .hero-inner{
+    max-width:1080px;
+    margin:0 auto;
+    padding:44px 0 70px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:40px;
+    align-items:start;
+  }
+
+  .eyebrow{
+    font-size:13px;
+    color:var(--amber);
+    letter-spacing:3px;
+    margin-bottom:14px;
+  }
+
+  h1{
+    font-size:44px;
+    font-weight:700;
+    line-height:1.1;
+    margin-bottom:18px;
+  }
+
+  .hero p.sub{
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    color:#C9C9BF;
+    max-width:440px;
+    margin-bottom:26px;
+  }
+
+  .hero-stats{
+    display:flex;
+    gap:34px;
+    margin-top:10px;
+  }
+
+  .hero-stats div b{
+    display:block;
+    font-family:'Oswald', sans-serif;
+    font-size:24px;
+    color:var(--amber);
+  }
+
+  .hero-stats div span{
+    font-size:12px;
+    color:#A9A99F;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+
+  .booking-card{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:6px;
+    padding:26px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+  }
+
+  .booking-card h2{
+    font-size:19px;
+    color:var(--highway);
+    margin-bottom:4px;
+  }
+
+  .booking-card .sub2{
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+
+  .field{
+    margin-bottom:14px;
+  }
+
+  .field label{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--muted);
+    margin-bottom:6px;
+    font-weight:600;
+  }
+
+  .field input, .field select{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #D9D3C4;
+    border-radius:4px;
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    background:#fff;
+    color:var(--ink);
+  }
+
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .btn-submit{
+    width:100%;
+    background:var(--highway);
+    color:#fff;
+    border:none;
+    padding:13px;
+    font-family:'Oswald', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:1px;
+    border-radius:4px;
+    cursor:pointer;
+    margin-top:6px;
+  }
+
+  .btn-submit:hover{ background:var(--highway-light); }
+
+  main{
+    max-width:1080px;
+    margin:0 auto;
+    padding:64px 24px;
+  }
+
+  .section-head{
+    text-align:center;
+    margin-bottom:38px;
+  }
+
+  .section-head .eyebrow{ color:var(--highway); text-align:center; }
+  .section-head h2{
+    font-size:30px;
+    color:var(--asphalt);
+  }
+
+  .fleet{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+
+  .fleet-card{
+    background:#fff;
+    border:1px solid #E4DFD1;
+    border-radius:6px;
+    overflow:hidden;
+  }
+
+  .fleet-head{
+    background:var(--asphalt);
+    color:#fff;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .fleet-head h3{
+    font-size:15px;
+    letter-spacing:1px;
+  }
+
+  .fleet-head span{
+    font-family:'Inter', sans-serif;
+    font-size:11px;
+    text-transform:none;
+    color:#C9C9BF;
+    letter-spacing:0;
+  }
+
+  .fleet-body{
+    padding:18px;
+  }
+
+  .fare-row{
+    padding:12px 0;
+    border-bottom:1px solid #EFEBDD;
+  }
+
+  .fare-row:last-child{ border-bottom:none; }
+
+  .fare-label{
+    font-family:'Oswald', sans-serif;
+    font-size:12px;
+    letter-spacing:1px;
+    color:var(--highway);
+    margin-bottom:4px;
+  }
+
+  .fare-amount{
+    font-family:'Oswald', sans-serif;
+    font-size:19px;
+    color:var(--asphalt);
+    font-weight:600;
+  }
+
+  .fare-amount span{
+    font-family:'Inter', sans-serif;
+    font-size:12px;
+    color:var(--muted);
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:400;
+  }
+
+  .fare-note{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:3px;
+  }
+
+  .packages{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+
+  .package-card{
+    background:var(--asphalt);
+    color:#fff;
+    border-radius:6px;
+    padding:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .package-card h3{ font-size:16px; color:var(--amber); margin-bottom:8px; }
+  .package-card .price{ font-family:'Oswald', sans-serif; font-size:28px; font-weight:600; }
+  .package-card ul{ list-style:none; margin-top:10px; font-size:13px; color:#C9C9BF; }
+  .package-card ul li{ margin-bottom:3px; }
+
+  .notes{
+    background:#fff;
+    border:1px solid #E4DFD1;
+    border-radius:6px;
+    padding:24px 28px;
+  }
+
+  .notes ul{
+    list-style:none;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 24px;
+  }
+
+  .notes li{
+    font-size:14px;
+    color:var(--ink);
+    padding-left:20px;
+    position:relative;
+  }
+
+  .notes li::before{
+    content:"✓";
+    color:var(--highway);
+    position:absolute;
+    left:0;
+    font-weight:700;
+  }
+
+  .features{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
+  }
+
+  .feature{
+    text-align:center;
+    padding:20px 12px;
+  }
+
+  .feature .num{
+    font-family:'Oswald', sans-serif;
+    font-size:13px;
+    color:var(--amber);
+    margin-bottom:10px;
+    letter-spacing:2px;
+  }
+
+  .feature h3{
+    font-size:15px;
+    color:var(--asphalt);
+    margin-bottom:8px;
+  }
+
+  .feature p{
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  footer{
+    background:var(--asphalt);
+    color:#C9C9BF;
+    padding:40px 24px 26px;
+  }
+
+  .footer-inner{
+    max-width:1080px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:24px;
+  }
+
+  .footer-inner .brand{ margin-bottom:8px; }
+
+  .footer-inner p{ font-size:13px; color:#9E9E94; margin-bottom:4px; }
+
+  .footer-col a{
+    display:block;
+    color:#C9C9BF;
+    text-decoration:none;
+    font-size:13px;
+    margin-bottom:6px;
+  }
+
+  .footer-col h4{
+    font-family:'Oswald', sans-serif;
+    font-size:12px;
+    letter-spacing:1px;
+    color:var(--amber);
+    margin-bottom:10px;
+    text-transform:uppercase;
+  }
+
+  .footer-bottom{
+    max-width:1080px;
+    margin:26px auto 0;
+    padding-top:18px;
+    border-top:1px solid #34393E;
+    font-size:12px;
+    color:#7C7C73;
+    text-align:center;
+  }
+
+  @media (max-width:800px){
+    .hero-inner{ grid-template-columns:1fr; }
+    h1{ font-size:32px; }
+    .fleet{ grid-template-columns:1fr; }
+    .packages{ grid-template-columns:1fr; }
+    .features{ grid-template-columns:1fr 1fr; }
+    .field-row{ grid-template-columns:1fr; }
+    .notes ul{ grid-template-columns:1fr; }
+  }
+
+  @media (max-width:520px){
+    .features{ grid-template-columns:1fr; }
+    .navbar{ flex-direction:column; align-items:flex-start; }
+    .package-card{ flex-direction:column; align-items:flex-start; gap:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="navbar">
+    <div class="brand">BALAJI <span>TRAVELS</span></div>
+    <a class="callbtn" href="tel:+919654778379">Call +91 96547 78379</a>
+  </div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Tour &amp; Taxi Services</div>
+      <h1>Outstation &amp; airport rides,<br>fixed fare, every time.</h1>
+      <p class="sub">Book a Dzire, Ertiga, or Innova Crysta for outstation trips, local runs, or airport drop &amp; pickup. New, well-maintained vehicles with professional drivers, available 24x7.</p>
+      <div class="hero-stats">
+        <div><b>3</b><span>Vehicle Options</span></div>
+        <div><b>24x7</b><span>Booking Open</span></div>
+        <div><b>Fixed</b><span>Upfront Fare</span></div>
+      </div>
+    </div>
+
+    <div class="booking-card">
+      <h2>Book Your Cab</h2>
+      <div class="sub2">Fill in your trip details — we'll confirm on WhatsApp</div>
+
+      <form id="bookingForm">
+        <div class="field">
+          <label>Car Type</label>
+          <select id="cartype">
+            <option>Dzire (4-Seater)</option>
+            <option>Ertiga (7-Seater)</option>
+            <option>Innova Crysta (7/8-Seater)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Trip Type</label>
+          <select id="triptype">
+            <option>Outstation</option>
+            <option>Airport Drop &amp; Pickup</option>
+            <option>Local Trip (8 Hrs / 80 Kms)</option>
+            <option>Monthly Package</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Pickup City</label>
+            <input type="text" id="pickup" placeholder="e.g. Panipat" required>
+          </div>
+          <div class="field">
+            <label>Drop City</label>
+            <input type="text" id="drop" placeholder="e.g. Manali" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Travel Date</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="name" placeholder="Full name" required>
+        </div>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="10-digit mobile number" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Booking Request →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="lane"></div>
+
+<main>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Our Fleet & Fares</div>
+      <h2>Choose Your Ride</h2>
+    </div>
+    <div class="fleet">
+
+      <div class="fleet-card">
+        <div class="fleet-head">
+          <h3>Dzire</h3>
+          <span>4-Seater</span>
+        </div>
+        <div class="fleet-body">
+          <div class="fare-row">
+            <div class="fare-label">Airport Drop &amp; Pickup</div>
+            <div class="fare-amount">₹1,000 <span>+ toll & parking</span></div>
+          </div>
+          <div class="fare-row">
+            <div class="fare-label">Outstation</div>
+            <div class="fare-amount">₹12 <span>/ km + toll + state tax + parking</span></div>
+            <div class="fare-note">+ ₹300 driver allowance per day</div>
+          </div>
+          <div class="fare-row">
+            <div class="fare-label">Local Trip (8 Hrs / 80 Kms)</div>
+            <div class="fare-amount">₹1,600</div>
+            <div class="fare-note">Extra km ₹14 · Extra hour ₹120 · Toll, tax & parking extra · ₹300 night charge after 10 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-head">
+          <h3>Ertiga</h3>
+          <span>7-Seater</span>
+        </div>
+        <div class="fleet-body">
+          <div class="fare-row">
+            <div class="fare-label">Airport Drop &amp; Pickup</div>
+            <div class="fare-amount">₹1,500 <span>+ toll & parking</span></div>
+          </div>
+          <div class="fare-row">
+            <div class="fare-label">Outstation</div>
+            <div class="fare-amount">₹15 <span>/ km + toll + state tax + parking</span></div>
+            <div class="fare-note">+ ₹300 driver allowance per day</div>
+          </div>
+          <div class="fare-row">
+            <div class="fare-label">Local Trip (8 Hrs / 80 Kms)</div>
+            <div class="fare-amount">₹2,000</div>
+            <div class="fare-note">Extra km ₹18 · Extra hour ₹150 · Toll, tax & parking extra · ₹300 night charge after 10 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fleet-card">
+        <div class="fleet-head">
+          <h3>Innova Crysta</h3>
+          <span>7/8-Seater</span>
+        </div>
+        <div class="fleet-body">
+          <div class="fare-row">
+            <div class="fare-label">Airport Drop &amp; Pickup</div>
+            <div class="fare-amount">₹2,000 <span>+ toll & parking</span></div>
+          </div>
+          <div class="fare-row">
+            <div class="fare-label">Outstation</div>
+            <div class="fare-amount">₹19–20 <span>/ km + toll + state tax + parking</span></div>
+            <div class="fare-note">+ ₹300 driver allowance per day</div>
+          </div>
+          <div class="fare-row">
+            <div class="fare-label">Local Trip (8 Hrs / 80 Kms)</div>
+            <div class="fare-amount">₹2,600</div>
+            <div class="fare-note">Extra km ₹22 · Extra hour ₹200 · Toll, tax & parking extra · ₹300 night charge after 10 PM</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Monthly Package</div>
+      <h2>For Regular, Long-Term Use</h2>
+    </div>
+    <div class="packages">
+      <div class="package-card">
+        <div>
+          <h3>Dzire</h3>
+          <div class="price">₹55,000</div>
+          <ul>
+            <li>26 Days · 3,000 Kms</li>
+            <li>12 Hours Per Day</li>
+          </ul>
+        </div>
+        <ul>
+          <li>Extra Km: ₹14/Km</li>
+          <li>Extra Hour: ₹120/Hr</li>
+        </ul>
+      </div>
+      <div class="package-card">
+        <div>
+          <h3>Ertiga</h3>
+          <div class="price">₹70,000</div>
+          <ul>
+            <li>26 Days · 3,000 Kms</li>
+            <li>12 Hours Per Day</li>
+          </ul>
+        </div>
+        <ul>
+          <li>Extra Km: ₹17/Km</li>
+          <li>Extra Hour: ₹150/Hr</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Please Note</div>
+      <h2>Important Terms</h2>
+    </div>
+    <div class="notes">
+      <ul>
+        <li>Kms will be counted from Garage to Garage</li>
+        <li>Minimum 250 Kms per day</li>
+        <li>Toll, State Tax &amp; Parking Charges Extra</li>
+        <li>₹300 Night Charges after 10 PM</li>
+        <li>All vehicles are new and well maintained</li>
+        <li>Professional, verified drivers on every trip</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Why Balaji Travels</div>
+      <h2>Built for Long Roads</h2>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="num">01</div>
+        <h3>Fixed Pricing</h3>
+        <p>Your fare is confirmed before you travel — no meter, no surge.</p>
+      </div>
+      <div class="feature">
+        <div class="num">02</div>
+        <h3>Verified Drivers</h3>
+        <p>Experienced, professional drivers on every trip.</p>
+      </div>
+      <div class="feature">
+        <div class="num">03</div>
+        <h3>Clean Vehicles</h3>
+        <p>New, well-maintained sedans and SUVs.</p>
+      </div>
+      <div class="feature">
+        <div class="num">04</div>
+        <h3>24x7 Support</h3>
+        <p>Call or WhatsApp anytime — before, during, or after your ride.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="lane"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="brand">BALAJI <span>TRAVELS</span></div>
+      <p>Tour &amp; Taxi Services</p>
+      <p>Outstation · Airport · Local · Monthly Packages</p>
+    </div>
+    <div class="footer-col">
+      <h4>Call</h4>
+      <a href="tel:+919654778379">96547 78379</a>
+      <a href="tel:+918386656168">83866 56168</a>
+      <a href="tel:+917027742731">70277 42731</a>
+      <a href="tel:+917015739633">70157 39633</a>
+    </div>
+    <div class="footer-col">
+      <h4>Email</h4>
+      <a href="mailto:sachin.sy57@gmail.com">sachin.sy57@gmail.com</a>
+      <a href="mailto:vanshushutteringhouse@gmail.com">vanshushutteringhouse@gmail.com</a>
+    </div>
+    <div class="footer-col">
+      <h4>WhatsApp</h4>
+      <a href="https://wa.me/919654778379">Chat to Book</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Balaji Travels. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  document.getElementById('bookingForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const cartype = document.getElementById('cartype').value;
+    const triptype = document.getElementById('triptype').value;
+    const pickup = document.getElementById('pickup').value;
+    const drop = document.getElementById('drop').value;
+    const date = document.getElementById('date').value;
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+
+    const message =
+      `New Taxi Booking Request%0A` +
+      `Name: ${encodeURIComponent(name)}%0A` +
+      `Phone: ${encodeURIComponent(phone)}%0A` +
+      `Car: ${encodeURIComponent(cartype)}%0A` +
+      `Trip Type: ${encodeURIComponent(triptype)}%0A` +
+      `Pickup: ${encodeURIComponent(pickup)}%0A` +
+      `Drop: ${encodeURIComponent(drop)}%0A` +
+      `Date: ${encodeURIComponent(date)}`;
+
+    const whatsappNumber = "919654778379";
+    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+  });
+</script>
+
+</body>
+</html>
