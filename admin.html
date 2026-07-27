@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balaji Travels — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<style>
+  :root{
+    --asphalt:#1B1F23;
+    --highway:#145A32;
+    --highway-light:#1E7A45;
+    --amber:#E8A33D;
+    --paper:#F3EFE6;
+    --ink:#2A2A26;
+    --muted:#6B6B62;
+    --reject:#B03A2E;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+  }
+  h1,h2,.brand{ font-family:'Oswald', sans-serif; }
+
+  /* login screen */
+  #loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .login-card{
+    background:#fff;
+    border:1px solid #E4DFD1;
+    border-radius:8px;
+    padding:36px;
+    width:100%;
+    max-width:360px;
+  }
+  .login-card .brand{
+    font-size:20px;
+    font-weight:700;
+    color:var(--asphalt);
+    margin-bottom:4px;
+    text-transform:uppercase;
+  }
+  .login-card .brand span{ color:var(--amber); }
+  .login-card .sub{
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:24px;
+  }
+  .field{ margin-bottom:14px; }
+  .field label{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--muted);
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  .field input{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid #D9D3C4;
+    border-radius:4px;
+    font-size:14px;
+  }
+  .btn{
+    width:100%;
+    background:var(--highway);
+    color:#fff;
+    border:none;
+    padding:12px;
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-size:14px;
+    border-radius:4px;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .btn:hover{ background:var(--highway-light); }
+  #loginError{
+    color:var(--reject);
+    font-size:13px;
+    margin-top:10px;
+    display:none;
+  }
+
+  /* dashboard */
+  #dashScreen{ display:none; }
+  .topbar{
+    background:var(--asphalt);
+    color:#fff;
+    padding:16px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .topbar .brand{ font-size:18px; font-weight:700; text-transform:uppercase; }
+  .topbar .brand span{ color:var(--amber); }
+  .logout-btn{
+    background:transparent;
+    border:1px solid #4A4F54;
+    color:#C9C9BF;
+    padding:8px 16px;
+    border-radius:4px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .logout-btn:hover{ border-color:var(--amber); color:var(--amber); }
+
+  main{ max-width:1100px; margin:0 auto; padding:30px 20px; }
+
+  .filters{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+  .filter-btn{
+    background:#fff;
+    border:1px solid #D9D3C4;
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--muted);
+  }
+  .filter-btn.active{
+    background:var(--asphalt);
+    color:#fff;
+    border-color:var(--asphalt);
+  }
+
+  .booking-card{
+    background:#fff;
+    border:1px solid #E4DFD1;
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .booking-info{ flex:1; min-width:240px; }
+  .booking-info .name{
+    font-family:'Oswald', sans-serif;
+    font-size:16px;
+    color:var(--asphalt);
+    margin-bottom:4px;
+  }
+  .booking-info .detail{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.7;
+  }
+  .booking-info .detail b{ color:var(--ink); }
+
+  .status-tag{
+    display:inline-block;
+    font-family:'Oswald', sans-serif;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:12px;
+    margin-bottom:8px;
+  }
+  .status-Pending{ background:#FCEFD9; color:#A9720F; }
+  .status-Approved{ background:#E1F0E5; color:var(--highway); }
+  .status-Rejected{ background:#F8E1DD; color:var(--reject); }
+
+  .actions{ display:flex; gap:8px; flex-direction:column; min-width:120px; }
+  .action-btn{
+    padding:9px 14px;
+    border:none;
+    border-radius:4px;
+    font-family:'Oswald', sans-serif;
+    font-size:12px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    cursor:pointer;
+    color:#fff;
+  }
+  .approve-btn{ background:var(--highway); }
+  .approve-btn:hover{ background:var(--highway-light); }
+  .reject-btn{ background:var(--reject); }
+  .reject-btn:hover{ background:#8f2e24; }
+
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  @media (max-width:600px){
+    .booking-card{ flex-direction:column; }
+    .actions{ flex-direction:row; width:100%; }
+    .action-btn{ flex:1; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="brand">BALAJI <span>TRAVELS</span></div>
+    <div class="sub">Admin Login</div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="your@email.com">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Password">
+    </div>
+    <button class="btn" onclick="doLogin()">Log In</button>
+    <div id="loginError">Incorrect email or password.</div>
+  </div>
+</div>
+
+<div id="dashScreen">
+  <div class="topbar">
+    <div class="brand">BALAJI <span>TRAVELS</span> — ADMIN</div>
+    <button class="logout-btn" onclick="doLogout()">Log Out</button>
+  </div>
+  <main>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="All" onclick="setFilter('All')">All</button>
+      <button class="filter-btn" data-filter="Pending" onclick="setFilter('Pending')">Pending</button>
+      <button class="filter-btn" data-filter="Approved" onclick="setFilter('Approved')">Approved</button>
+      <button class="filter-btn" data-filter="Rejected" onclick="setFilter('Rejected')">Rejected</button>
+    </div>
+    <div id="bookingsList"></div>
+  </main>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNw2MD3LH9iwULab4pj_zQu4SEj_xUw00",
+    authDomain: "balaji-travel-a265e.firebaseapp.com",
+    databaseURL: "https://balaji-travel-a265e-default-rtdb.firebaseio.com",
+    projectId: "balaji-travel-a265e",
+    storageBucket: "balaji-travel-a265e.firebasestorage.app",
+    messagingSenderId: "93846899034",
+    appId: "1:93846899034:web:6081e9eb2f4fa4e7c80b63"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  let allBookings = [];
+  let currentFilter = "All";
+
+  function doLogin(){
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    document.getElementById('loginError').style.display = 'none';
+
+    auth.signInWithEmailAndPassword(email, password)
+      .catch(function(error){
+        document.getElementById('loginError').style.display = 'block';
+      });
+  }
+
+  function doLogout(){
+    auth.signOut();
+  }
+
+  auth.onAuthStateChanged(function(user){
+    if (user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashScreen').style.display = 'block';
+      loadBookings();
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('dashScreen').style.display = 'none';
+    }
+  });
+
+  function loadBookings(){
+    db.ref('bookings').on('value', function(snapshot){
+      allBookings = [];
+      snapshot.forEach(function(child){
+        allBookings.push({ id: child.key, ...child.val() });
+      });
+      allBookings.reverse(); // newest first
+      renderBookings();
+    });
+  }
+
+  function setFilter(filter){
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    renderBookings();
+  }
+
+  function renderBookings(){
+    const list = document.getElementById('bookingsList');
+    const filtered = currentFilter === 'All'
+      ? allBookings
+      : allBookings.filter(function(b){ return (b.status || 'Pending') === currentFilter; });
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="empty-state">No bookings here yet.</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(function(b){
+      const status = b.status || 'Pending';
+      return `
+        <div class="booking-card">
+          <div class="booking-info">
+            <span class="status-tag status-${status}">${status}</span>
+            <div class="name">${b.name || ''}</div>
+            <div class="detail">
+              <b>Phone:</b> ${b.phone || ''}<br>
+              <b>Car:</b> ${b.car || ''} &nbsp;·&nbsp; <b>Trip:</b> ${b.triptype || ''}<br>
+              <b>Route:</b> ${b.pickup || ''} → ${b.drop || ''}<br>
+              <b>Travel Date:</b> ${b.date || ''}
+            </div>
+          </div>
+          <div class="actions">
+            <button class="action-btn approve-btn" onclick="updateStatus('${b.id}','Approved')">Approve</button>
+            <button class="action-btn reject-btn" onclick="updateStatus('${b.id}','Rejected')">Reject</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateStatus(id, status){
+    db.ref('bookings/' + id).update({ status: status });
+  }
+</script>
+
+</body>
+</html>
