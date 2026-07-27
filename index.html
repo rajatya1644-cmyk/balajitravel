@@ -6,6 +6,8 @@
 <title>Balaji Travels — Outstation & Airport Taxi Booking</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
   :root{
     --asphalt:#1B1F23;
@@ -134,11 +136,13 @@
 
   /* ---- booking card ---- */
   .booking-card{
-    background:var(--paper);
+    background:#fff;
     color:var(--ink);
     border-radius:6px;
-    padding:26px;
-    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+    padding:30px;
+    border:1px solid #E4DFD1;
+    max-width:600px;
+    margin:0 auto;
   }
 
   .booking-card h2{
@@ -573,63 +577,6 @@
         <div><b>Fixed</b><span>Upfront Fare</span></div>
       </div>
     </div>
-
-    <div class="booking-card">
-      <h2>Book Your Cab</h2>
-      <div class="sub2">Fill in your trip details — we'll confirm on WhatsApp</div>
-
-      <form id="bookingForm">
-        <div class="field">
-          <label>Car Type</label>
-          <select id="cartype">
-            <option>Dzire (4-Seater)</option>
-            <option>Ertiga (7-Seater)</option>
-            <option>Innova Crysta (7/8-Seater)</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Trip Type</label>
-          <select id="triptype">
-            <option>Outstation</option>
-            <option>Airport Drop &amp; Pickup</option>
-            <option>Local Trip (8 Hrs / 80 Kms)</option>
-            <option>Monthly Package</option>
-          </select>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label>Pickup City</label>
-            <input type="text" id="pickup" placeholder="e.g. Panipat" required>
-          </div>
-          <div class="field">
-            <label>Drop City</label>
-            <input type="text" id="drop" placeholder="e.g. Manali" required>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Travel Date</label>
-          <input type="date" id="date" required>
-        </div>
-
-        <div class="field">
-          <label>Your Name</label>
-          <input type="text" id="name" placeholder="Full name" required>
-        </div>
-
-        <div class="field">
-          <label>Phone Number</label>
-          <input type="tel" id="phone" placeholder="10-digit mobile number" required>
-        </div>
-
-        <button type="submit" class="btn-submit">Send Booking Request →</button>
-        <div id="confirmNote" style="display:none; margin-top:12px; font-size:13px; color:var(--highway); text-align:center;">
-          ✓ Opening WhatsApp — please tap Send there to complete your request. We'll confirm your booking shortly.
-        </div>
-      </form>
-    </div>
   </div>
 </div>
 
@@ -775,6 +722,68 @@
 
   <section>
     <div class="section-head">
+      <div class="eyebrow">Book Now</div>
+      <h2>Book Your Cab</h2>
+    </div>
+    <div class="booking-card">
+      <div class="sub2" style="text-align:center; margin-bottom:20px;">Fill in your trip details — we'll confirm on WhatsApp</div>
+
+      <form id="bookingForm">
+        <div class="field">
+          <label>Car Type</label>
+          <select id="cartype">
+            <option>Dzire (4-Seater)</option>
+            <option>Ertiga (7-Seater)</option>
+            <option>Innova Crysta (7/8-Seater)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Trip Type</label>
+          <select id="triptype">
+            <option>Outstation</option>
+            <option>Airport Drop &amp; Pickup</option>
+            <option>Local Trip (8 Hrs / 80 Kms)</option>
+            <option>Monthly Package</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Pickup City</label>
+            <input type="text" id="pickup" placeholder="e.g. Panipat" required>
+          </div>
+          <div class="field">
+            <label>Drop City</label>
+            <input type="text" id="drop" placeholder="e.g. Manali" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Travel Date</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="name" placeholder="Full name" required>
+        </div>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="10-digit mobile number" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Booking Request →</button>
+        <div id="confirmNote" style="display:none; margin-top:12px; font-size:13px; color:var(--highway); text-align:center;">
+          ✓ Opening WhatsApp — please tap Send there to complete your request. We'll confirm your booking shortly.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
       <div class="eyebrow">Why Balaji Travels</div>
       <h2>Built for Long Roads</h2>
     </div>
@@ -901,6 +910,18 @@
 </footer>
 
 <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNw2MD3LH9iwULab4pj_zQu4SEj_xUw00",
+    authDomain: "balaji-travel-a265e.firebaseapp.com",
+    databaseURL: "https://balaji-travel-a265e-default-rtdb.firebaseio.com",
+    projectId: "balaji-travel-a265e",
+    storageBucket: "balaji-travel-a265e.firebasestorage.app",
+    messagingSenderId: "93846899034",
+    appId: "1:93846899034:web:6081e9eb2f4fa4e7c80b63"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
   document.getElementById('bookingForm').addEventListener('submit', function(e){
     e.preventDefault();
 
@@ -911,6 +932,19 @@
     const date = document.getElementById('date').value;
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
+
+    // Save booking into Firebase so it shows up in the admin panel
+    db.ref('bookings').push({
+      name: name,
+      phone: phone,
+      car: cartype,
+      triptype: triptype,
+      pickup: pickup,
+      drop: drop,
+      date: date,
+      status: "Pending",
+      createdAt: new Date().toISOString()
+    });
 
     const message =
       `New Taxi Booking Request%0A` +
